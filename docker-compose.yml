@@ -1,0 +1,44 @@
+version: '3.8'
+
+services:
+  # Base de datos MongoDB
+  mongodb:
+    image: mongo:7.0
+    container_name: mongodb_userdb
+    restart: unless-stopped
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_DATABASE: userdb
+    volumes:
+      - mongodb_data:/data/db
+      - ./mongo-init:/docker-entrypoint-initdb.d
+    networks:
+      - app-network
+
+  # Aplicación Node.js
+  app:
+    build: .
+    container_name: express_userapp
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      PORT: 3000
+      GOOGLE_MAPS_API_KEY: AIzaSyD8oulOzAbzu9QsIKVs2X61H17HEpT6uZs
+      JWT_SECRET: 123
+      MONGODB_URI: mongodb://mongodb:27017/userdb
+    depends_on:
+      - mongodb
+    networks:
+      - app-network
+    volumes:
+      - .:/app
+      - /app/node_modules
+
+volumes:
+  mongodb_data:
+
+networks:
+  app-network:
+    driver: bridge 
