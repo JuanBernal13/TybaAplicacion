@@ -127,4 +127,4 @@ curl -X POST http://localhost:3000/api/v1/restaurants/nearby \
 - JWT + bcrypt
 - Google Maps API
 - Docker
-- Jest + Supertest (Testing) 
+- Jest + Pruebas automatizadas mediante GitHub Actions. (Por cada commit, se corre el pipeline de pruebas) 
